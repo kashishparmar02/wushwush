@@ -166,7 +166,7 @@ function ItineraryForm() {
               onChange={handleChange}
               className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500"
               placeholder="Any specific requests or preferences..."
-              rows={4}
+              rows={"4"}
             ></textarea>
           </div>
           <button
