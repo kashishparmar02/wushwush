@@ -1,5 +1,5 @@
-declare module '*.jsx' {
-    const value: any;
-    export default value;
-  }
-  
+// src/declarations.d.ts
+declare module './App' {
+  const App: React.ComponentType;
+  export default App;
+}

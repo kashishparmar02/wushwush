@@ -1,13 +1,16 @@
 {
   "compilerOptions": {
-    "target": "es6",
-    "module": "commonjs",
-    "strict": true,
+    "allowJs": true,
+    "checkJs": true,
+    "jsx": "react-jsx",
+    "module": "ESNext",
+    "target": "ESNext",
+    "outDir": "./dist",  // Specify output directory for compiled files
+    "moduleResolution": "node",
     "esModuleInterop": true,
     "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
-    "outDir": "./dist"
+    "forceConsistentCasingInFileNames": true
   },
   "include": ["src/**/*"],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules", "dist"]  // Exclude node_modules and the output directory
 }
