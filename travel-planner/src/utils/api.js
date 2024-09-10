@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 
 // Create an Axios instance
 const api = axios.create({
-  baseURL: 'http://localhost:5000/api', 
+  baseURL: 'https://wushwush.onrender.com/api', 
 });
 
 // Add a request interceptor to include the token
