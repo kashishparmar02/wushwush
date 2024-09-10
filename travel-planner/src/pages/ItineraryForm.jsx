@@ -22,7 +22,14 @@ function ItineraryForm() {
   const navigate = useNavigate();
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+
+    // Ensure numerical fields are converted to numbers
+    if (name === 'duration' || name === 'numOfPeople' || name === 'budget') {
+      setFormData({ ...formData, [name]: value ? Number(value) : '' });
+    } else {
+      setFormData({ ...formData, [name]: value });
+    }
   };
 
   const handleDateChange = (date) => {
@@ -36,7 +43,7 @@ function ItineraryForm() {
 
     const data = {
       destination: formData.destination,
-      duration: Number(formData.duration),
+      duration: formData.duration ? Number(formData.duration) : undefined,
       numOfPeople: formData.numOfPeople ? Number(formData.numOfPeople) : undefined,
       interest: formData.interest || undefined,
       budget: formData.budget ? Number(formData.budget) : undefined,
@@ -45,7 +52,9 @@ function ItineraryForm() {
         : undefined,
       startDate: formData.startDate,
       dietaryRestrictions: formData.dietaryRestrictions || undefined,
-      itineraryDetails: formData.itineraryDetails ? formData.itineraryDetails.split(';').map((item) => item.trim()) : [],
+      itineraryDetails: formData.itineraryDetails
+        ? formData.itineraryDetails.split(';').map((item) => item.trim())
+        : [],
     };
 
     try {
