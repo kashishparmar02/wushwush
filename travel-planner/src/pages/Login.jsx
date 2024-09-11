@@ -10,6 +10,7 @@ function Login() {
     password: '',
   });
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false); // Loading state
   const navigate = useNavigate();
 
   const { username, password } = formData;
@@ -21,12 +22,15 @@ function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
+    setLoading(true); // Start loading
     try {
       const res = await api.post('/auth/login', { username, password });
       setToken(res.data.token);
       navigate('/itinerary-form');
     } catch (err) {
       setError(err.response?.data?.error || 'Login failed');
+    } finally {
+      setLoading(false); // Stop loading
     }
   };
 
@@ -60,9 +64,36 @@ function Login() {
           </div>
           <button
             type="submit"
-            className="w-full px-4 py-2 text-white bg-green-500 rounded hover:bg-green-600"
+            className={`w-full px-4 py-2 text-white bg-green-500 rounded hover:bg-green-600 ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
+            disabled={loading} // Disable the button while loading
           >
-            Log In
+            {loading ? (
+              <div className="flex items-center justify-center space-x-2">
+                <svg
+                  className="w-5 h-5 text-white animate-spin"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    className="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                  ></circle>
+                  <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+                  ></path>
+                </svg>
+                <span>Logging in...</span>
+              </div>
+            ) : (
+              'Log In'
+            )}
           </button>
         </form>
         <p className="text-center">

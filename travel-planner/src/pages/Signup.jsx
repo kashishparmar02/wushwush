@@ -10,6 +10,7 @@ function Signup() {
     password: '',
   });
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false); // Loading state
   const navigate = useNavigate();
 
   const { username, email, password } = formData;
@@ -21,12 +22,15 @@ function Signup() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
+    setLoading(true); // Start loading
     try {
       const res = await api.post('/auth/signup', { username, email, password });
       alert(res.data.message);
       navigate('/login');
     } catch (err) {
       setError(err.response?.data?.message || 'Signup failed');
+    } finally {
+      setLoading(false); // Stop loading
     }
   };
 
@@ -71,9 +75,36 @@ function Signup() {
           </div>
           <button
             type="submit"
-            className="w-full px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-600"
+            className={`w-full px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-600 ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
+            disabled={loading} // Disable the button while loading
           >
-            Sign Up
+            {loading ? (
+              <div className="flex items-center justify-center space-x-2">
+                <svg
+                  className="w-5 h-5 text-white animate-spin"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    className="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                  ></circle>
+                  <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+                  ></path>
+                </svg>
+                <span>Signing up...</span>
+              </div>
+            ) : (
+              'Sign Up'
+            )}
           </button>
         </form>
         <p className="text-center">
