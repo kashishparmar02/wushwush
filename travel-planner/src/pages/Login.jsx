@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import api from '../utils/api';
 import { setToken } from '../utils/auth';
+import { motion } from 'framer-motion';
 
 function Login() {
   const [formData, setFormData] = useState({
@@ -10,7 +11,7 @@ function Login() {
     password: '',
   });
   const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false); // Loading state
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const { username, password } = formData;
@@ -22,7 +23,7 @@ function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
-    setLoading(true); // Start loading
+    setLoading(true);
     try {
       const res = await api.post('/auth/login', { username, password });
       setToken(res.data.token);
@@ -30,15 +31,30 @@ function Login() {
     } catch (err) {
       setError(err.response?.data?.error || 'Login failed');
     } finally {
-      setLoading(false); // Stop loading
+      setLoading(false);
     }
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-green-50">
-      <div className="w-full max-w-md p-8 space-y-4 bg-white rounded shadow">
-        <h2 className="text-2xl font-bold text-center">Log In</h2>
-        {error && <div className="p-2 text-red-700 bg-red-100 border border-red-400 rounded">{error}</div>}
+    <div className="relative flex items-center justify-center min-h-screen bg-gradient-to-r from-blue-300 via-purple-300 to-pink-300">
+     
+
+      {/* Form Container */}
+      <motion.div
+        initial={{ scale: 0.8, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        transition={{ duration: 0.8 }}
+        className="relative z-10 w-full max-w-md p-8 space-y-4 bg-white rounded-lg shadow-lg"
+      >
+        <h2 className="text-3xl font-bold text-center text-gray-800">
+          Welcome Back, Traveler!
+        </h2>
+        <p className="text-center text-gray-500">Log in and start your journey!</p>
+        {error && (
+          <div className="p-2 text-red-700 bg-red-100 border border-red-400 rounded">
+            {error}
+          </div>
+        )}
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="block mb-1 text-gray-600">Username</label>
@@ -48,7 +64,7 @@ function Login() {
               value={username}
               onChange={handleChange}
               required
-              className="w-full px-3 py-2 border rounded focus:outline-none focus:ring focus:border-green-300"
+              className="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
           <div>
@@ -59,13 +75,17 @@ function Login() {
               value={password}
               onChange={handleChange}
               required
-              className="w-full px-3 py-2 border rounded focus:outline-none focus:ring focus:border-green-300"
+              className="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
-          <button
+          <motion.button
             type="submit"
-            className={`w-full px-4 py-2 text-white bg-green-500 rounded hover:bg-green-600 ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
-            disabled={loading} // Disable the button while loading
+            className={`w-full px-4 py-2 text-white bg-gradient-to-r from-green-400 to-green-600 rounded hover:bg-green-700 ${
+              loading ? 'opacity-50 cursor-not-allowed' : ''
+            }`}
+            disabled={loading}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
           >
             {loading ? (
               <div className="flex items-center justify-center space-x-2">
@@ -94,7 +114,7 @@ function Login() {
             ) : (
               'Log In'
             )}
-          </button>
+          </motion.button>
         </form>
         <p className="text-center">
           Don't have an account?{' '}
@@ -102,7 +122,7 @@ function Login() {
             Sign Up
           </Link>
         </p>
-      </div>
+      </motion.div>
     </div>
   );
 }
